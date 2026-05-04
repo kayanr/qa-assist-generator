@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Results — QA Assist Generator</title>
+</head>
+<body>
+
+<h1>Test Cases</h1>
+
+<p>
+    <strong th:text="${featureName}"></strong> |
+    <span th:text="${featureType}"></span> |
+    <span th:text="${priority}"></span>
+</p>
+
+<p th:if="${#lists.isEmpty(testCases)}">No test cases generated. Check that you selected at least one test type.</p>
+
+<table border="1" th:unless="${#lists.isEmpty(testCases)}">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Precondition</th>
+            <th>Steps</th>
+            <th>Expected Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="tc : ${testCases}">
+            <td th:text="${tc.id}"></td>
+            <td th:text="${tc.title}"></td>
+            <td th:text="${tc.testType}"></td>
+            <td th:text="${tc.precondition}"></td>
+            <td th:text="${tc.steps}"></td>
+            <td th:text="${tc.expectedResult}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/">Generate another</a>
+
+</body>
+</html>
