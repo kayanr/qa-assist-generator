@@ -17,18 +17,30 @@ public class Main {
         TemplateRegistry registry = new TemplateRegistry();
         TestCaseGeneratorService generatorService = new TestCaseGeneratorService(registry);
 
-        TestCaseRequest request = new TestCaseRequest(
-            "Product Search",
-            FeatureType.SEARCH,
-            "Testing search functionality with various negative input scenarios",
-            Priority.HIGH,
-            List.of(TestType.NEGATIVE)
-        );
+        // All test types selected
+        List<TestType> allTestTypes = List.of(TestType.values());
 
-        List<TestCase> testCases = generatorService.generate(request);
+        for (FeatureType featureType : FeatureType.values()) {
 
-        for (TestCase testCase : testCases) {
-            System.out.println(testCase);
+            System.out.println("\n========================================");
+            System.out.println("Feature Type: " + featureType);
+            System.out.println("========================================");
+
+            TestCaseRequest request = new TestCaseRequest(
+                    featureType + " Feature",
+                    featureType,
+                    "Auto-generated test cases for " + featureType,
+                    Priority.HIGH,
+                    allTestTypes
+            );
+
+            List<TestCase> testCases = generatorService.generate(request);
+
+            for (TestCase testCase : testCases) {
+                System.out.println(testCase);
+            }
         }
+
+        System.out.println("\n===== END OF GENERATION =====");
     }
 }
