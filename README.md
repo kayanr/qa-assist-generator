@@ -99,7 +99,7 @@ The engine is **stateless** — it takes input, generates output, and stores not
 
 | Phase | Description | Status |
 |---|---|---|
-| Engine | Plain Java rule-based generator | In Progress |
+| Engine | Plain Java rule-based generator | ✅ Complete |
 | 1 | Spring Boot wrap + structured form + results table | Not started |
 | 2 | CSV export | Not started |
 | 3 | Excel export (Apache POI) | Not started |
@@ -109,11 +109,21 @@ The engine is **stateless** — it takes input, generates output, and stores not
 
 ---
 
-## Running Locally
+## Running the Engine (Demo)
 
-> Coming in Phase 1 — Spring Boot wrap not yet added.
+The plain Java engine is complete and runnable. To test it locally:
 
-Once complete, run with:
+```bash
+mvn compile exec:java -Dexec.mainClass="com.qaassist.generator.Main"
+```
+
+This runs `Main.java` — no Spring Boot or browser needed. Output prints to the console.
+
+---
+
+## Running the Web App (Phase 1 — Coming Soon)
+
+Once the Spring Boot wrap is added:
 
 ```bash
 mvn spring-boot:run
