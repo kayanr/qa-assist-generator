@@ -47,4 +47,15 @@ public class TestCase {
         return priority;
     }   
 
+    @Override
+    public String toString() {
+        return "ID: " + id + "\n" +
+           "Title: " + title + "\n" +
+           "Type: " + testType + "\n" +
+           "Priority: " + priority + "\n" +
+           "Precondition: " + precondition + "\n" +
+           "Steps: " + steps + "\n" +
+           "Expected: " + expectedResult + "\n";
+}
+
 }
