@@ -1,6 +1,5 @@
 package com.qaassist.generator;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.qaassist.generator.engine.TestCaseGeneratorService;
@@ -13,17 +12,13 @@ import com.qaassist.generator.engine.registry.TemplateRegistry;
 
 public class Main {
     public static void main(String[] args) {
-            long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
-        System.out.println("================================================");
-        System.out.println("   QA ASSIST GENERATOR — ENGINE DEMO");
-        System.out.println("   Version 0.1.0");
-        System.out.println("================================================");
-
+        ConsolePrinter.printBanner();
         TemplateRegistry registry = new TemplateRegistry();
         TestCaseGeneratorService generatorService = new TestCaseGeneratorService(registry);
 
-        List<TestType> allTestTypes = Arrays.asList(TestType.values());
+        List<TestType> allTestTypes = List.of(TestType.values());
 
         int totalFeatureTypes = 0;
         int totalTestCasesGenerated = 0;
@@ -42,21 +37,16 @@ public class Main {
             totalFeatureTypes++;
             totalTestCasesGenerated += testCases.size();
 
-            System.out.println("\n========================================");
-            System.out.println("Feature Type: " + featureType + " (" + testCases.size() + " test cases)");
-            System.out.println("========================================");
+            ConsolePrinter.printFeatureHeader(featureType.name(), testCases.size(), "HIGH");
 
             for (TestCase testCase : testCases) {
-                System.out.println(testCase);
+                ConsolePrinter.printTestCase(testCase);
             }
         }
 
         long endTime = System.currentTimeMillis();
         long durationMs = endTime - startTime;
 
-        System.out.println("\n===== END OF GENERATION =====");
-        System.out.println("Total feature types: " + totalFeatureTypes);
-        System.out.println("Total test cases generated: " + totalTestCasesGenerated);
-        System.out.println("Generated " + totalTestCasesGenerated + " test cases in " + durationMs + "ms");
+        ConsolePrinter.printSummary(totalFeatureTypes, totalTestCasesGenerated, durationMs);
     }
 }
