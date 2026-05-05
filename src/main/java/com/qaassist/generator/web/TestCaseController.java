@@ -1,5 +1,6 @@
 package com.qaassist.generator.web;
 
+import com.qaassist.generator.engine.KeywordDetector;
 import com.qaassist.generator.engine.TestCaseGeneratorService;
 import com.qaassist.generator.engine.model.FeatureType;
 import com.qaassist.generator.engine.model.Priority;
@@ -21,22 +22,47 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.qaassist.generator.engine.KeywordDetector;
 
 
 @Controller
 public class TestCaseController {
 
     private final TestCaseGeneratorService generatorService;
+    private final KeywordDetector keywordDetector;
 
-    public TestCaseController(TestCaseGeneratorService generatorService) {
+    public TestCaseController(TestCaseGeneratorService generatorService,
+                            KeywordDetector keywordDetector) {
         this.generatorService = generatorService;
+        this.keywordDetector = keywordDetector;
     }
+
 
     @GetMapping("/")
     public String showForm(Model model) {
         model.addAttribute("featureTypes", FeatureType.values());
         model.addAttribute("priorities", Priority.values());
         model.addAttribute("testTypes", TestType.values());
+        return "index";
+    }
+
+    @PostMapping("/detect")
+    public String detect(
+            @RequestParam("text") String text,
+            Model model) {
+
+        model.addAttribute("featureTypes", FeatureType.values());
+        model.addAttribute("priorities", Priority.values());
+        model.addAttribute("testTypes", TestType.values());
+
+        FeatureType detected = keywordDetector.detect(text);
+
+        if (detected != null) {
+            model.addAttribute("detectedType", detected);
+        } else {
+            model.addAttribute("detectionFailed", true);
+        }
+
         return "index";
     }
 
