@@ -52,5 +52,27 @@
 <div th:if="${detectionFailed}">
     <p>Could not detect feature type — please select manually from the form above.</p>
 </div>
+<hr>
+
+<h2>Upload a Feature Description File</h2>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <label>Select a .txt file</label><br>
+    <input type="file" name="file" accept=".txt"><br><br>
+    <button type="submit">Upload and Detect</button>
+</form>
+
+<div th:if="${uploadDetectedType != null}">
+    <p>Detected feature type: <strong th:text="${uploadDetectedType}"></strong></p>
+</div>
+
+<div th:if="${uploadFailed}">
+    <p>Could not detect feature type from file — please select manually from the form above.</p>
+</div>
+
+<div th:if="${uploadError}">
+    <p>Could not read the file. Please upload a valid .txt file.</p>
+</div>
+
 </body>
 </html>
