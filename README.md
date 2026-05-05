@@ -71,7 +71,13 @@ src/main/java/com/qaassist/generator/
 │   ├── registry/
 │   │   └── TemplateRegistry.java    — EnumMap wiring FeatureType → Template
 │   └── TestCaseGeneratorService.java
-└── Main.java                        — plain Java demo runner
+├── web/
+│   └── TestCaseController.java      — GET / (form), POST /generate (results)
+└── QaAssistGeneratorApplication.java — Spring Boot entry point
+
+src/main/resources/templates/
+├── index.html                        — Thymeleaf input form
+└── results.html                      — Thymeleaf results table
 ```
 
 ---
@@ -100,7 +106,7 @@ The engine is **stateless** — it takes input, generates output, and stores not
 | Phase | Description | Status |
 |---|---|---|
 | Engine | Plain Java rule-based generator | ✅ Complete |
-| 1 | Spring Boot wrap + structured form + results table | Not started |
+| 1 | Spring Boot wrap + structured form + results table | ✅ Complete |
 | 2 | CSV export | Not started |
 | 3 | Excel export (Apache POI) | Not started |
 | 4 | Free-form text input | Not started |
@@ -121,15 +127,13 @@ This runs `Main.java` — no Spring Boot or browser needed. Output prints to the
 
 ---
 
-## Running the Web App (Phase 1 — Coming Soon)
-
-Once the Spring Boot wrap is added:
+## Running the Web App
 
 ```bash
 mvn spring-boot:run
 ```
 
-Then open `http://localhost:8080` in your browser.
+Open `http://localhost:8080` in your browser. Fill in the form and click **Generate Test Cases**.
 
 ---
 
