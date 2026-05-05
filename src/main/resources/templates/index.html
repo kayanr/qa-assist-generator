@@ -35,6 +35,22 @@
     <button type="submit">Generate Test Cases</button>
 
 </form>
+<hr>
 
+<h2>Detect Feature Type from Description</h2>
+
+<form action="/detect" method="post">
+    <label>Describe the feature</label><br>
+    <textarea name="text" rows="4" cols="40" placeholder="e.g. User can upload a profile picture"></textarea><br><br>
+    <button type="submit">Detect Feature Type</button>
+</form>
+
+<div th:if="${detectedType != null}">
+    <p>Detected feature type: <strong th:text="${detectedType}"></strong></p>
+</div>
+
+<div th:if="${detectionFailed}">
+    <p>Could not detect feature type — please select manually from the form above.</p>
+</div>
 </body>
 </html>
