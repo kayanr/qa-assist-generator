@@ -8,7 +8,7 @@ An offline, local Java tool that generates structured QA test cases from feature
 
 You fill in a form with details about a feature — name, type, priority, and which test types you want. The tool generates a set of relevant test cases instantly, ready to view on screen, download as CSV, or download as Excel.
 
-Alternatively, type a free-form description and the tool will detect the feature type automatically from keywords in the text.
+Alternatively, type a free-form description or upload a `.txt` file — the tool will detect the feature type automatically from keywords in the text.
 
 ---
 
@@ -74,9 +74,9 @@ src/main/java/com/qaassist/generator/
 │   │   └── TemplateRegistry.java    — EnumMap wiring FeatureType → Template
 │   └── TestCaseGeneratorService.java
 ├── web/
-│   └── TestCaseController.java      — GET / (form), POST /generate (results), POST /download-csv, POST /download-excel
+│   └── TestCaseController.java      — GET / (form), POST /generate, POST /download-csv, POST /download-excel, POST /detect, POST /upload
 ├── engine/
-│   └── KeywordDetector.java             — scans free-form text, returns FeatureType or null
+│   └── KeywordDetector.java             — scans free-form text or file content, returns FeatureType or null
 └── QaAssistGeneratorApplication.java — Spring Boot entry point
 
 src/main/resources/templates/
@@ -114,7 +114,7 @@ The engine is **stateless** — it takes input, generates output, and stores not
 | 2 | CSV export | ✅ Complete |
 | 3 | Excel export (Apache POI) | ✅ Complete |
 | 4 | Free-form text input (keyword detection) | ✅ Complete |
-| 5 | File upload (.txt / .docx) | Not started |
+| 5 | File upload (.txt) | ✅ Complete |
 | 6 | JSON export | Not started |
 
 ---
