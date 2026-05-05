@@ -40,6 +40,15 @@
 </table>
 
 <br>
+<form action="/download-csv" method="post" th:if="${not #lists.isEmpty(testCases)}">
+    <input type="hidden" name="featureName" th:value="${featureName}">
+    <input type="hidden" name="featureType" th:value="${featureType}">
+    <input type="hidden" name="description" th:value="${description}">
+    <input type="hidden" name="priority" th:value="${priority}">
+    <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+    <button type="submit">Download CSV</button>
+</form>
+
 <a href="/">Generate another</a>
 
 </body>
