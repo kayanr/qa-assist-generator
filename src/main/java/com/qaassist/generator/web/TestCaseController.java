@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import jakarta.servlet.http.HttpServletResponse;
@@ -65,6 +66,36 @@ public class TestCaseController {
 
         return "index";
     }
+@PostMapping("/upload")
+public String upload(
+        @RequestParam("file") MultipartFile file,
+        Model model) {
+
+    model.addAttribute("featureTypes", FeatureType.values());
+    model.addAttribute("priorities", Priority.values());
+    model.addAttribute("testTypes", TestType.values());
+
+    if (file.isEmpty()) {
+        model.addAttribute("uploadError", true);
+        return "index";
+    }
+
+    try {
+        String text = new String(file.getBytes());
+        FeatureType detected = keywordDetector.detect(text);
+
+        if (detected != null) {
+            model.addAttribute("uploadDetectedType", detected);
+        } else {
+            model.addAttribute("uploadFailed", true);
+        }
+
+    } catch (IOException e) {
+        model.addAttribute("uploadError", true);
+    }
+
+    return "index";
+}
 
     @PostMapping("/generate")
     public String generate(
