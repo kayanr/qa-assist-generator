@@ -24,20 +24,23 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.qaassist.generator.engine.KeywordDetector;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Controller
 public class TestCaseController {
 
-    private final TestCaseGeneratorService generatorService;
-    private final KeywordDetector keywordDetector;
+private final TestCaseGeneratorService generatorService;
+private final KeywordDetector keywordDetector;
+private final ObjectMapper objectMapper;
 
-    public TestCaseController(TestCaseGeneratorService generatorService,
-                            KeywordDetector keywordDetector) {
-        this.generatorService = generatorService;
-        this.keywordDetector = keywordDetector;
-    }
-
+public TestCaseController(TestCaseGeneratorService generatorService,
+                          KeywordDetector keywordDetector,
+                          ObjectMapper objectMapper) {
+    this.generatorService = generatorService;
+    this.keywordDetector = keywordDetector;
+    this.objectMapper = objectMapper;
+}
 
     @GetMapping("/")
     public String showForm(Model model) {
@@ -95,6 +98,27 @@ public String upload(
     }
 
     return "index";
+}
+@PostMapping("/download-json")
+public void downloadJson(
+        @RequestParam("featureName") String featureName,
+        @RequestParam("featureType") FeatureType featureType,
+        @RequestParam(name = "description", required = false, defaultValue = "") String description,
+        @RequestParam("priority") Priority priority,
+        @RequestParam("testTypes") List<TestType> testTypes,
+        HttpServletResponse response) throws IOException {
+
+    TestCaseRequest request = new TestCaseRequest(
+            featureName, featureType, description, priority, testTypes);
+
+    List<TestCase> testCases = generatorService.generate(request);
+
+    response.setContentType("application/json");
+    response.setHeader("Content-Disposition",
+            "attachment; filename=\"" + featureName.replaceAll("\\s+", "_") + "_test_cases.json\"");
+
+    objectMapper.writerWithDefaultPrettyPrinter()
+                .writeValue(response.getOutputStream(), testCases);
 }
 
     @PostMapping("/generate")
