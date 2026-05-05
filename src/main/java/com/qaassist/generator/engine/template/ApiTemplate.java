@@ -76,7 +76,7 @@ public class ApiTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.BOUNDARY)) {
             results.add(new TestCase(
-                "API-012",
+                "API-006",
                 "Request with very large payload",
                 "API accepts request bodies and has configured payload limits.",
                 "1. Send request with an extremely large JSON body or oversized field value.\n" +
@@ -89,7 +89,7 @@ public class ApiTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.EDGE)) {
             results.add(new TestCase(
-                "API-006",
+                "API-007",
                 "Request with malformed JSON returns 400",
                 "API endpoint accepts JSON request bodies. User/client has valid authentication if required.",
                 "1. Send a request with invalid JSON syntax, such as missing braces or quotes.\n" +
@@ -100,7 +100,7 @@ public class ApiTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "API-007",
+                "API-008",
                 "Request with SQL injection payload",
                 "API accepts user-controlled input and interacts with a database.",
                 "1. Send a request with SQL injection text such as ' OR 1=1 -- in a request field.\n" +
@@ -111,7 +111,7 @@ public class ApiTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "API-008",
+                "API-009",
                 "Request with script injection payload",
                 "API accepts text fields that may later be displayed in a UI.",
                 "1. Send a request with <script>alert('test')</script> in a text field.\n" +
@@ -122,7 +122,7 @@ public class ApiTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "API-009",
+                "API-010",
                 "Request with invalid or expired token",
                 "API endpoint requires authentication.",
                 "1. Send request with expired, malformed, or invalid bearer token.\n" +
@@ -133,7 +133,7 @@ public class ApiTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "API-010",
+                "API-011",
                 "Request with another user's resource ID",
                 "Authenticated user owns one resource. Another resource belongs to a different user.",
                 "1. Authenticate as User A.\n" +
@@ -145,7 +145,7 @@ public class ApiTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "API-011",
+                "API-012",
                 "Request with unexpected extra fields",
                 "API accepts JSON request body. Server should only bind allowed fields.",
                 "1. Send valid JSON plus extra fields such as \"role\": \"ADMIN\" or \"isAdmin\": true.\n" +

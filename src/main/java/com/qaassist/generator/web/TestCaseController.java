@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -133,7 +135,12 @@ public void downloadJson(
         TestCaseRequest request = new TestCaseRequest(
                 featureName, featureType, description, priority, testTypes);
 
-        model.addAttribute("testCases", generatorService.generate(request));
+        List<TestCase> testCases = generatorService.generate(request);
+        Map<String, Long> typeCounts = testCases.stream()
+                .collect(Collectors.groupingBy(tc -> tc.getTestType().name(), Collectors.counting()));
+
+        model.addAttribute("testCases", testCases);
+        model.addAttribute("typeCounts", typeCounts);
         model.addAttribute("featureName", featureName);
         model.addAttribute("featureType", featureType);
         model.addAttribute("priority", priority);
@@ -174,6 +181,7 @@ public void downloadJson(
                 tc.getSteps().replace("\"", "\"\""),
                 tc.getExpectedResult().replace("\"", "\"\""));
     }
+}
 
 @PostMapping("/download-excel")
 public void downloadExcel(
