@@ -6,7 +6,7 @@ An offline, local Java tool that generates structured QA test cases from feature
 
 ## What It Does
 
-You fill in a form with details about a feature — name, type, priority, and which test types you want. The tool generates a set of relevant test cases instantly, ready to use or export.
+You fill in a form with details about a feature — name, type, priority, and which test types you want. The tool generates a set of relevant test cases instantly, ready to view on screen, download as CSV, or download as Excel.
 
 ---
 
@@ -72,7 +72,7 @@ src/main/java/com/qaassist/generator/
 │   │   └── TemplateRegistry.java    — EnumMap wiring FeatureType → Template
 │   └── TestCaseGeneratorService.java
 ├── web/
-│   └── TestCaseController.java      — GET / (form), POST /generate (results)
+│   └── TestCaseController.java      — GET / (form), POST /generate (results), POST /download-csv, POST /download-excel
 └── QaAssistGeneratorApplication.java — Spring Boot entry point
 
 src/main/resources/templates/
@@ -107,8 +107,8 @@ The engine is **stateless** — it takes input, generates output, and stores not
 |---|---|---|
 | Engine | Plain Java rule-based generator | ✅ Complete |
 | 1 | Spring Boot wrap + structured form + results table | ✅ Complete |
-| 2 | CSV export | Not started |
-| 3 | Excel export (Apache POI) | Not started |
+| 2 | CSV export | ✅ Complete |
+| 3 | Excel export (Apache POI) | ✅ Complete |
 | 4 | Free-form text input | Not started |
 | 5 | File upload (.txt / .docx) | Not started |
 | 6 | JSON export | Not started |
