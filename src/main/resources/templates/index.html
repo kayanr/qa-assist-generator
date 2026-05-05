@@ -3,76 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>QA Assist Generator</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div class="container">
 
-<h1>QA Test Case Generator</h1>
+    <h1>QA Test Case Generator</h1>
+    <p class="subtitle">Generate structured QA test cases from feature details, descriptions, or uploaded files.</p>
 
-<form action="/generate" method="post">
+    <h2>Generate Test Cases</h2>
+    <form action="/generate" method="post">
 
-    <label>Feature Name</label><br>
-    <input type="text" name="featureName" required><br><br>
+        <label>Feature Name</label>
+        <input type="text" name="featureName" required>
 
-    <label>Feature Type</label><br>
-    <select name="featureType">
-        <option th:each="type : ${featureTypes}" th:value="${type}" th:text="${type}"></option>
-    </select><br><br>
+        <label>Feature Type</label>
+        <select name="featureType" id="featureTypeSelect">
+            <option th:each="type : ${featureTypes}"
+                    th:value="${type}"
+                    th:text="${type.displayName}"
+                    th:selected="${detectedType != null and type == detectedType} or ${uploadDetectedType != null and type == uploadDetectedType}">
+            </option>
+        </select>
 
-    <label>Description (optional)</label><br>
-    <textarea name="description" rows="3" cols="40"></textarea><br><br>
+        <label>Description (optional)</label>
+        <textarea name="description" rows="3"></textarea>
 
-    <label>Priority</label><br>
-    <select name="priority">
-        <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
-    </select><br><br>
+        <label>Priority</label>
+        <select name="priority">
+            <option th:each="p : ${priorities}"
+                    th:value="${p}"
+                    th:text="${p}"
+                    th:selected="${p.name() == 'HIGH'}">
+            </option>
+        </select>
 
-    <label>Test Types</label><br>
-    <div th:each="type : ${testTypes}">
-        <input type="checkbox" name="testTypes" th:value="${type}" th:id="${type}">
-        <label th:for="${type}" th:text="${type}"></label>
-    </div><br>
+        <label>Test Types</label>
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="selectAll" onclick="toggleAll(this)">
+                <span>Select All</span>
+            </label>
+            <span class="checkbox-divider">|</span>
+            <label th:each="type : ${testTypes}"
+                   th:title="${type.name() == 'HAPPY_PATH'} ? 'Expected successful flow — valid inputs, correct behaviour' :
+                              (${type.name() == 'NEGATIVE'} ? 'Invalid inputs, missing data, or error conditions' :
+                              (${type.name() == 'BOUNDARY'} ? 'Values at or just beyond the limits of valid input' :
+                              'Rare, extreme, or unexpected scenarios'))">
+                <input type="checkbox" name="testTypes" th:value="${type}" th:id="${type}" checked>
+                <span th:text="${type.displayName}"></span>
+            </label>
+        </div>
 
-    <button type="submit">Generate Test Cases</button>
+        <button type="submit">Generate Test Cases</button>
 
-</form>
-<hr>
+    </form>
 
-<h2>Detect Feature Type from Description</h2>
+    <h2>Detect Feature Type from Description</h2>
+    <form action="/detect" method="post">
+        <label>Describe the feature</label>
+        <textarea name="text" rows="4" placeholder="e.g. User can upload a profile picture"></textarea>
+        <button type="submit">Detect Feature Type</button>
+    </form>
 
-<form action="/detect" method="post">
-    <label>Describe the feature</label><br>
-    <textarea name="text" rows="4" cols="40" placeholder="e.g. User can upload a profile picture"></textarea><br><br>
-    <button type="submit">Detect Feature Type</button>
-</form>
+    <div th:if="${detectedType != null}" class="alert alert-info">
+        Detected: <strong th:text="${detectedType.displayName}"></strong> — feature type pre-selected in the form above.
+    </div>
+    <div th:if="${detectionFailed}" class="alert alert-warning">
+        Could not detect feature type — please select manually from the form above.
+    </div>
 
-<div th:if="${detectedType != null}">
-    <p>Detected feature type: <strong th:text="${detectedType}"></strong></p>
+    <h2>Upload a Feature Description File</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label>Select a .txt file</label>
+        <input type="file" name="file" accept=".txt">
+        <button type="submit">Upload and Detect</button>
+    </form>
+
+    <div th:if="${uploadDetectedType != null}" class="alert alert-info">
+        Detected: <strong th:text="${uploadDetectedType.displayName}"></strong> — feature type pre-selected in the form above.
+    </div>
+    <div th:if="${uploadFailed}" class="alert alert-warning">
+        Could not detect feature type from file — please select manually from the form above.
+    </div>
+    <div th:if="${uploadError}" class="alert alert-warning">
+        Could not read the file. Please upload a valid .txt file.
+    </div>
+
 </div>
 
-<div th:if="${detectionFailed}">
-    <p>Could not detect feature type — please select manually from the form above.</p>
-</div>
-<hr>
-
-<h2>Upload a Feature Description File</h2>
-
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <label>Select a .txt file</label><br>
-    <input type="file" name="file" accept=".txt"><br><br>
-    <button type="submit">Upload and Detect</button>
-</form>
-
-<div th:if="${uploadDetectedType != null}">
-    <p>Detected feature type: <strong th:text="${uploadDetectedType}"></strong></p>
-</div>
-
-<div th:if="${uploadFailed}">
-    <p>Could not detect feature type from file — please select manually from the form above.</p>
-</div>
-
-<div th:if="${uploadError}">
-    <p>Could not read the file. Please upload a valid .txt file.</p>
-</div>
+<script>
+function toggleAll(source) {
+    document.querySelectorAll('input[name="testTypes"]').forEach(cb => cb.checked = source.checked);
+}
+</script>
 
 </body>
 </html>

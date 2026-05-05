@@ -44,7 +44,7 @@ public class SearchTemplate implements TestCaseTemplate {
                 "User is on the search page. Search field is empty.",
                 "1. Leave the search field empty.\n" +
                 "2. Click the Search button or press Enter.",
-                "System prevents search or displays a validation message indicating the field is required. No unnecessary backend call is made.",
+                "System prevents search or displays a validation message indicating the field is required.",
                 TestType.NEGATIVE,
                 request.getPriority()
             ));

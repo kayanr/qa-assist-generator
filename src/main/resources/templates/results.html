@@ -3,69 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Results — QA Assist Generator</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div class="container">
 
-<h1>Test Cases</h1>
+    <h1>Test Cases</h1>
 
-<p>
-    <strong th:text="${featureName}"></strong> |
-    <span th:text="${featureType}"></span> |
-    <span th:text="${priority}"></span>
-</p>
+    <p class="summary">
+        <strong th:text="${featureName}"></strong> |
+        <span th:text="${featureType.displayName}"></span> |
+        <span th:text="${priority}"></span>
+    </p>
 
-<p th:if="${#lists.isEmpty(testCases)}">No test cases generated. Check that you selected at least one test type.</p>
+    <!-- Summary cards -->
+    <div class="summary-cards" th:unless="${#lists.isEmpty(testCases)}">
+        <div class="summary-card card-total">
+            <div class="card-count" th:text="${#lists.size(testCases)}">0</div>
+            <div class="card-label">Total</div>
+        </div>
+        <div class="summary-card card-happy-path" th:if="${typeCounts['HAPPY_PATH'] != null}">
+            <div class="card-count" th:text="${typeCounts['HAPPY_PATH']}">0</div>
+            <div class="card-label">Happy Path</div>
+        </div>
+        <div class="summary-card card-negative" th:if="${typeCounts['NEGATIVE'] != null}">
+            <div class="card-count" th:text="${typeCounts['NEGATIVE']}">0</div>
+            <div class="card-label">Negative</div>
+        </div>
+        <div class="summary-card card-boundary" th:if="${typeCounts['BOUNDARY'] != null}">
+            <div class="card-count" th:text="${typeCounts['BOUNDARY']}">0</div>
+            <div class="card-label">Boundary</div>
+        </div>
+        <div class="summary-card card-edge" th:if="${typeCounts['EDGE'] != null}">
+            <div class="card-count" th:text="${typeCounts['EDGE']}">0</div>
+            <div class="card-label">Edge</div>
+        </div>
+    </div>
 
-<table border="1" th:unless="${#lists.isEmpty(testCases)}">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Precondition</th>
-            <th>Steps</th>
-            <th>Expected Result</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="tc : ${testCases}">
-            <td th:text="${tc.id}"></td>
-            <td th:text="${tc.title}"></td>
-            <td th:text="${tc.testType}"></td>
-            <td th:text="${tc.precondition}"></td>
-            <td th:text="${tc.steps}"></td>
-            <td th:text="${tc.expectedResult}"></td>
-        </tr>
-    </tbody>
-</table>
+    <p th:if="${#lists.isEmpty(testCases)}" class="alert alert-warning">
+        No test cases generated. Check that you selected at least one test type.
+    </p>
 
-<br>
-<form action="/download-csv" method="post" th:if="${not #lists.isEmpty(testCases)}">
-    <input type="hidden" name="featureName" th:value="${featureName}">
-    <input type="hidden" name="featureType" th:value="${featureType}">
-    <input type="hidden" name="description" th:value="${description}">
-    <input type="hidden" name="priority" th:value="${priority}">
-    <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-    <button type="submit">Download CSV</button>
-</form>
-<form action="/download-excel" method="post" th:if="${not #lists.isEmpty(testCases)}">
-    <input type="hidden" name="featureName" th:value="${featureName}">
-    <input type="hidden" name="featureType" th:value="${featureType}">
-    <input type="hidden" name="description" th:value="${description}">
-    <input type="hidden" name="priority" th:value="${priority}">
-    <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-    <button type="submit">Download Excel</button>
-</form>
-<form action="/download-json" method="post" th:if="${not #lists.isEmpty(testCases)}">
-    <input type="hidden" name="featureName" th:value="${featureName}">
-    <input type="hidden" name="featureType" th:value="${featureType}">
-    <input type="hidden" name="description" th:value="${description}">
-    <input type="hidden" name="priority" th:value="${priority}">
-    <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-    <button type="submit">Download JSON</button>
-</form>
+    <table th:unless="${#lists.isEmpty(testCases)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Precondition</th>
+                <th>Steps</th>
+                <th>Expected Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="tc : ${testCases}">
+                <td th:text="${tc.id}"></td>
+                <td th:text="${tc.title}"></td>
+                <td>
+                    <span th:class="'badge badge-' + ${tc.testType.name().toLowerCase().replace('_', '-')}"
+                          th:text="${tc.testType.displayName}"></span>
+                </td>
+                <td th:text="${tc.precondition}"></td>
+                <td th:text="${tc.steps}"></td>
+                <td th:text="${tc.expectedResult}"></td>
+            </tr>
+        </tbody>
+    </table>
 
-<a href="/">Generate another</a>
+    <div class="download-buttons" th:if="${not #lists.isEmpty(testCases)}">
+        <form action="/download-csv" method="post">
+            <input type="hidden" name="featureName" th:value="${featureName}">
+            <input type="hidden" name="featureType" th:value="${featureType}">
+            <input type="hidden" name="description" th:value="${description}">
+            <input type="hidden" name="priority" th:value="${priority}">
+            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+            <button type="submit">Download CSV</button>
+        </form>
+        <form action="/download-excel" method="post">
+            <input type="hidden" name="featureName" th:value="${featureName}">
+            <input type="hidden" name="featureType" th:value="${featureType}">
+            <input type="hidden" name="description" th:value="${description}">
+            <input type="hidden" name="priority" th:value="${priority}">
+            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+            <button type="submit">Download Excel</button>
+        </form>
+        <form action="/download-json" method="post">
+            <input type="hidden" name="featureName" th:value="${featureName}">
+            <input type="hidden" name="featureType" th:value="${featureType}">
+            <input type="hidden" name="description" th:value="${description}">
+            <input type="hidden" name="priority" th:value="${priority}">
+            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+            <button type="submit">Download JSON</button>
+        </form>
+    </div>
 
+    <a href="/" class="btn-secondary">Generate another</a>
+
+</div>
 </body>
 </html>
