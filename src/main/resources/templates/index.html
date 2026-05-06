@@ -12,10 +12,11 @@
     <p class="subtitle">Generate structured QA test cases from feature details, descriptions, or uploaded files.</p>
 
     <h2>Generate Test Cases</h2>
-    <form action="/generate" method="post">
+    <form action="/generate" method="post" id="generateForm">
 
         <label>Feature Name</label>
-        <input type="text" name="featureName" required>
+        <input type="text" name="featureName" id="featureName" required
+               placeholder="e.g. User Login, File Upload, Password Reset">
 
         <label>Feature Type</label>
         <select name="featureType" id="featureTypeSelect">
@@ -27,10 +28,10 @@
         </select>
 
         <label>Description (optional)</label>
-        <textarea name="description" rows="3"></textarea>
+        <textarea name="description" id="description" rows="3"></textarea>
 
         <label>Priority</label>
-        <select name="priority">
+        <select name="priority" id="priority">
             <option th:each="p : ${priorities}"
                     th:value="${p}"
                     th:text="${p}"
@@ -50,7 +51,8 @@
                               (${type.name() == 'NEGATIVE'} ? 'Invalid inputs, missing data, or error conditions' :
                               (${type.name() == 'BOUNDARY'} ? 'Values at or just beyond the limits of valid input' :
                               'Rare, extreme, or unexpected scenarios'))">
-                <input type="checkbox" name="testTypes" th:value="${type}" th:id="${type}" checked>
+                <input type="checkbox" name="testTypes" th:value="${type}" th:id="${type}" checked
+                       onchange="syncSelectAll()">
                 <span th:text="${type.displayName}"></span>
             </label>
         </div>
@@ -96,6 +98,34 @@
 function toggleAll(source) {
     document.querySelectorAll('input[name="testTypes"]').forEach(cb => cb.checked = source.checked);
 }
+
+function syncSelectAll() {
+    const all = document.querySelectorAll('input[name="testTypes"]');
+    const checked = document.querySelectorAll('input[name="testTypes"]:checked');
+    const selectAll = document.getElementById('selectAll');
+    selectAll.checked = all.length === checked.length;
+    selectAll.indeterminate = checked.length > 0 && checked.length < all.length;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Sync Select All state on load
+    syncSelectAll();
+
+    // Restore previous form values from sessionStorage
+    const saved = sessionStorage.getItem('qa_last_request');
+    if (saved) {
+        const data = JSON.parse(saved);
+        if (data.featureName) document.getElementById('featureName').value = data.featureName;
+        if (data.featureType) document.querySelector('select[name="featureType"]').value = data.featureType;
+        if (data.priority) document.querySelector('select[name="priority"]').value = data.priority;
+        if (data.testTypes) {
+            document.querySelectorAll('input[name="testTypes"]').forEach(cb => {
+                cb.checked = data.testTypes.includes(cb.value);
+            });
+        }
+        syncSelectAll();
+    }
+});
 </script>
 
 </body>

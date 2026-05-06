@@ -232,11 +232,55 @@ tbody td {
 .badge-boundary    { background-color: #fff3cd; color: #856404; }
 .badge-edge        { background-color: #e2d9f3; color: #4a235a; }
 
+/* ── Filter buttons ── */
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.filter-btn {
+    padding: 5px 14px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    color: #555;
+}
+
+.filter-btn.active {
+    background-color: #2d6cdf;
+    color: #fff;
+    border-color: #2d6cdf;
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: #f0f4ff;
+    border-color: #2d6cdf;
+    color: #2d6cdf;
+}
+
 /* ── Download buttons row ── */
 .download-buttons {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.download-option {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.download-hint {
+    font-size: 11px;
+    color: #888;
+    margin: 0;
 }
 
 .download-buttons form {
