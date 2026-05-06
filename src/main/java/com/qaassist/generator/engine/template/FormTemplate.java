@@ -15,7 +15,7 @@ public class FormTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.HAPPY_PATH)) {
             results.add(new TestCase(
-                "FORM-001",
+                "FORM-HP-001",
                 "Submit form with valid data",
                 "User is on the form page. All required fields are visible and enabled. Valid test data is available.",
                 "1. Enter valid data in all required fields.\n" +
@@ -29,7 +29,7 @@ public class FormTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.NEGATIVE)) {
             results.add(new TestCase(
-                "FORM-002",
+                "FORM-NEG-001",
                 "Submit form with required fields empty",
                 "User is on the form page. One or more fields are required.",
                 "1. Leave all required fields empty.\n" +
@@ -40,7 +40,7 @@ public class FormTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "FORM-003",
+                "FORM-NEG-002",
                 "Submit form with invalid email format",
                 "User is on the form page. Form contains an email field with format validation.",
                 "1. Enter an invalid email such as userexample.com.\n" +
@@ -54,7 +54,7 @@ public class FormTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.BOUNDARY)) {
             results.add(new TestCase(
-                "FORM-004",
+                "FORM-BND-001",
                 "Submit form with maximum length field input",
                 "User is on the form page. One or more text fields have a maximum allowed length.",
                 "1. Enter text exactly at the maximum allowed length.\n" +
@@ -68,7 +68,7 @@ public class FormTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.EDGE)) {
             results.add(new TestCase(
-                "FORM-005",
+                "FORM-EDG-001",
                 "Submit form with special characters in fields",
                 "User is on the form page. Text fields accept user-entered input.",
                 "1. Enter special characters such as @#$%^&*() in a text field.\n" +
@@ -80,7 +80,7 @@ public class FormTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "FORM-006",
+                "FORM-EDG-002",
                 "Submit form multiple times rapidly",
                 "User is on the form page. All required fields contain valid data. Submit button is enabled.",
                 "1. Fill out the form with valid data.\n" +
@@ -92,7 +92,7 @@ public class FormTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "FORM-007",
+                "FORM-EDG-003",
                 "Submit form with SQL injection input",
                 "User is on the form page. Form data is saved or processed by a backend service/database.",
                 "1. Enter SQL injection text such as ' OR 1=1 -- into a text field.\n" +
@@ -104,7 +104,7 @@ public class FormTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "FORM-008",
+                "FORM-EDG-004",
                 "Submit form with script injection input",
                 "User is on the form page. Submitted data may later be displayed in the UI.",
                 "1. Enter <script>alert('test')</script> into a text field.\n" +

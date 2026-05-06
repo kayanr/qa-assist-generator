@@ -15,7 +15,7 @@ public class RegisterTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.HAPPY_PATH)) {
             results.add(new TestCase(
-                "REGISTER-001",
+                "REGISTER-HP-001",
                 "Register with valid data",
                 "User is on the registration page. No existing account uses the provided email. All required fields are available.",
                 "1. Enter valid username.\n" +
@@ -31,7 +31,7 @@ public class RegisterTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.NEGATIVE)) {
             results.add(new TestCase(
-                "REGISTER-002",
+                "REGISTER-NEG-001",
                 "Register with duplicate email",
                 "User is on the registration page. An account already exists with the entered email.",
                 "1. Enter valid username.\n" +
@@ -44,7 +44,7 @@ public class RegisterTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "REGISTER-003",
+                "REGISTER-NEG-002",
                 "Register with weak password",
                 "User is on the registration page. Password policy is enforced (e.g., min length, uppercase, number, special char).",
                 "1. Enter valid username.\n" +
@@ -57,7 +57,7 @@ public class RegisterTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "REGISTER-004",
+                "REGISTER-NEG-003",
                 "Register with missing required fields",
                 "User is on the registration page. Required fields include username, email, and password.",
                 "1. Leave one or more required fields empty.\n" +
@@ -68,7 +68,7 @@ public class RegisterTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "REGISTER-005",
+                "REGISTER-NEG-004",
                 "Register with invalid email format",
                 "User is on the registration page. Email field requires valid format.",
                 "1. Enter invalid email (e.g., useremail.com).\n" +
@@ -82,7 +82,7 @@ public class RegisterTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.BOUNDARY)) {
             results.add(new TestCase(
-                "REGISTER-006",
+                "REGISTER-BND-001",
                 "Register with maximum length username",
                 "User is on the registration page. System enforces a maximum username length.",
                 "1. Enter username exactly at max allowed length.\n" +
@@ -97,7 +97,7 @@ public class RegisterTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.EDGE)) {
             results.add(new TestCase(
-                "REGISTER-007",
+                "REGISTER-EDG-001",
                 "Register with special characters in name",
                 "User is on the registration page. Username field accepts text input.",
                 "1. Enter username with special characters (e.g., user@123!).\n" +
@@ -110,7 +110,7 @@ public class RegisterTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "REGISTER-008",
+                "REGISTER-EDG-002",
                 "Register with SQL injection input",
                 "User is on the registration page. System stores user data in a database.",
                 "1. Enter ' OR 1=1 -- in username or email field.\n" +
@@ -122,7 +122,7 @@ public class RegisterTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "REGISTER-009",
+                "REGISTER-EDG-003",
                 "Register with script injection input",
                 "User is on the registration page. System displays user data in UI or responses.",
                 "1. Enter <script>alert('test')</script> in username field.\n" +

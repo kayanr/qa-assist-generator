@@ -15,7 +15,7 @@ public class SearchTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.HAPPY_PATH)) {
             results.add(new TestCase(
-                "SEARCH-001",
+                "SEARCH-HP-001",
                 "Search with valid keyword",
                 "User is on the search page. The system contains data that matches the search keyword.",
                 "1. Enter a valid keyword into the search field.\n" +
@@ -28,7 +28,7 @@ public class SearchTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.NEGATIVE)) {
             results.add(new TestCase(
-                "SEARCH-002",
+                "SEARCH-NEG-001",
                 "Search returns no results",
                 "User is on the search page. The system does not contain data matching the entered keyword.",
                 "1. Enter a keyword that has no matching records.\n" +
@@ -39,7 +39,7 @@ public class SearchTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "SEARCH-003",
+                "SEARCH-NEG-002",
                 "Search with empty query",
                 "User is on the search page. Search field is empty.",
                 "1. Leave the search field empty.\n" +
@@ -48,11 +48,22 @@ public class SearchTemplate implements TestCaseTemplate {
                 TestType.NEGATIVE,
                 request.getPriority()
             ));
+
+            results.add(new TestCase(
+                "SEARCH-NEG-003",
+                "Search with whitespace only",
+                "User is on the search page. Search field contains only spaces.",
+                "1. Enter one or more space characters into the search field.\n" +
+                "2. Click the Search button or press Enter.",
+                "System treats whitespace-only input the same as an empty query. Search is prevented or a validation message is shown. No backend search is triggered.",
+                TestType.NEGATIVE,
+                request.getPriority()
+            ));
         }
 
         if (request.getTestTypes().contains(TestType.BOUNDARY)) {
             results.add(new TestCase(
-                "SEARCH-004",
+                "SEARCH-BND-001",
                 "Search with maximum length query",
                 "User is on the search page. The system enforces a maximum character limit for search input.",
                 "1. Enter a query string at the maximum allowed character length.\n" +
@@ -65,7 +76,7 @@ public class SearchTemplate implements TestCaseTemplate {
 
         if (request.getTestTypes().contains(TestType.EDGE)) {
             results.add(new TestCase(
-                "SEARCH-005",
+                "SEARCH-EDG-001",
                 "Search with special characters",
                 "User is on the search page. Search field accepts general text input.",
                 "1. Enter special characters (e.g. @#$%^&*()) into the search field.\n" +
@@ -76,7 +87,7 @@ public class SearchTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "SEARCH-006",
+                "SEARCH-EDG-002",
                 "Search with SQL injection input",
                 "User is on the search page. Application interacts with a backend database.",
                 "1. Enter input like ' OR 1=1 -- into the search field.\n" +
@@ -87,7 +98,7 @@ public class SearchTemplate implements TestCaseTemplate {
             ));
 
             results.add(new TestCase(
-                "SEARCH-007",
+                "SEARCH-EDG-003",
                 "Search with script injection input",
                 "User is on the search page. Application renders search results in the UI.",
                 "1. Enter <script>alert('test')</script> into the search field.\n" +
