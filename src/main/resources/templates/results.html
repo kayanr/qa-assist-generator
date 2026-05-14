@@ -44,6 +44,15 @@
         No test cases generated. Check that you selected at least one test type.
     </p>
 
+    <!-- Filter buttons -->
+    <div class="filter-buttons" th:unless="${#lists.isEmpty(testCases)}">
+        <button type="button" class="filter-btn active" data-filter="ALL" onclick="filterTable(this)">All</button>
+        <button type="button" class="filter-btn" data-filter="HAPPY_PATH" onclick="filterTable(this)">Happy Path</button>
+        <button type="button" class="filter-btn" data-filter="NEGATIVE" onclick="filterTable(this)">Negative</button>
+        <button type="button" class="filter-btn" data-filter="BOUNDARY" onclick="filterTable(this)">Boundary</button>
+        <button type="button" class="filter-btn" data-filter="EDGE" onclick="filterTable(this)">Edge</button>
+    </div>
+
     <table th:unless="${#lists.isEmpty(testCases)}">
         <thead>
             <tr>
@@ -56,7 +65,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="tc : ${testCases}">
+            <tr th:each="tc : ${testCases}" th:attr="data-type=${tc.testType.name()}">
                 <td th:text="${tc.id}"></td>
                 <td th:text="${tc.title}"></td>
                 <td>
@@ -71,34 +80,66 @@
     </table>
 
     <div class="download-buttons" th:if="${not #lists.isEmpty(testCases)}">
-        <form action="/download-csv" method="post">
-            <input type="hidden" name="featureName" th:value="${featureName}">
-            <input type="hidden" name="featureType" th:value="${featureType}">
-            <input type="hidden" name="description" th:value="${description}">
-            <input type="hidden" name="priority" th:value="${priority}">
-            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-            <button type="submit">Download CSV</button>
-        </form>
-        <form action="/download-excel" method="post">
-            <input type="hidden" name="featureName" th:value="${featureName}">
-            <input type="hidden" name="featureType" th:value="${featureType}">
-            <input type="hidden" name="description" th:value="${description}">
-            <input type="hidden" name="priority" th:value="${priority}">
-            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-            <button type="submit">Download Excel</button>
-        </form>
-        <form action="/download-json" method="post">
-            <input type="hidden" name="featureName" th:value="${featureName}">
-            <input type="hidden" name="featureType" th:value="${featureType}">
-            <input type="hidden" name="description" th:value="${description}">
-            <input type="hidden" name="priority" th:value="${priority}">
-            <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
-            <button type="submit">Download JSON</button>
-        </form>
+        <div class="download-option">
+            <form action="/download-csv" method="post">
+                <input type="hidden" name="featureName" th:value="${featureName}">
+                <input type="hidden" name="featureType" th:value="${featureType}">
+                <input type="hidden" name="description" th:value="${description}">
+                <input type="hidden" name="priority" th:value="${priority}">
+                <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+                <button type="submit">Download CSV</button>
+            </form>
+            <p class="download-hint">CSV — import to TestRail or Jira</p>
+        </div>
+        <div class="download-option">
+            <form action="/download-excel" method="post">
+                <input type="hidden" name="featureName" th:value="${featureName}">
+                <input type="hidden" name="featureType" th:value="${featureType}">
+                <input type="hidden" name="description" th:value="${description}">
+                <input type="hidden" name="priority" th:value="${priority}">
+                <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+                <button type="submit">Download Excel</button>
+            </form>
+            <p class="download-hint">Excel — share with your team</p>
+        </div>
+        <div class="download-option">
+            <form action="/download-json" method="post">
+                <input type="hidden" name="featureName" th:value="${featureName}">
+                <input type="hidden" name="featureType" th:value="${featureType}">
+                <input type="hidden" name="description" th:value="${description}">
+                <input type="hidden" name="priority" th:value="${priority}">
+                <input type="hidden" th:each="type : ${selectedTestTypes}" name="testTypes" th:value="${type}">
+                <button type="submit">Download JSON</button>
+            </form>
+            <p class="download-hint">JSON — use in pipelines or automation</p>
+        </div>
     </div>
 
     <a href="/" class="btn-secondary">Generate another</a>
 
 </div>
+
+<script th:inline="javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    // Save form values so index.html can restore them on "Generate another"
+    const data = {
+        featureName: /*[[${featureName}]]*/ '',
+        featureType: /*[[${featureType}]]*/ '',
+        priority: /*[[${priority}]]*/ '',
+        testTypes: /*[[${selectedTestTypes}]]*/ []
+    };
+    sessionStorage.setItem('qa_last_request', JSON.stringify(data));
+});
+
+function filterTable(btn) {
+    const filter = btn.getAttribute('data-filter');
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.style.display = (filter === 'ALL' || row.getAttribute('data-type') === filter) ? '' : 'none';
+    });
+}
+</script>
+
 </body>
 </html>

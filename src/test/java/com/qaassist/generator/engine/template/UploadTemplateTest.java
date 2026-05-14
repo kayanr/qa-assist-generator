@@ -24,7 +24,7 @@ class UploadTemplateTest {
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals("UPLOAD-001", results.get(0).getId());
+        assertEquals("UPLOAD-HP-001", results.get(0).getId());
     }
 
     @Test
@@ -44,7 +44,7 @@ class UploadTemplateTest {
 
         // Assert
         assertEquals(2, results.size());
-        assertEquals("UPLOAD-002", results.get(0).getId());
+        assertEquals("UPLOAD-NEG-001", results.get(0).getId());
     }
     @Test
     void edgeCaseGeneratesOneCase() {
@@ -63,7 +63,7 @@ class UploadTemplateTest {
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals("UPLOAD-006", results.get(0).getId());
+        assertEquals("UPLOAD-EDG-001", results.get(0).getId());
     }
 
 
